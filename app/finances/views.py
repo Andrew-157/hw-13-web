@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from .models import Income
 
 
 def index(request):
@@ -21,4 +22,4 @@ def statistics(request):
 
 def add_income(request):
     print(request.POST['income'])
-    return HttpResponseRedirect(reverse('finances:index'))
+    return HttpResponseRedirect(reverse('finances:income'))
