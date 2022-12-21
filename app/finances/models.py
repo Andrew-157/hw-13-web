@@ -9,12 +9,12 @@ class Income(models.Model):
         return self.value
 
 
-class Category(models.Model):
-    name = models.CharField()
+class OutcomeCategory(models.Model):
+    name = models.CharField(max_length=56)
 
 
 class Outcome(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(OutcomeCategory, on_delete=models.CASCADE)
     value = models.FloatField()
     pub_date = models.DateTimeField('date published')
 
