@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-from .models import Income, OutcomeCategory
+from .models import Income, OutcomeCategory, Outcome
 from django.contrib import messages
 
 
@@ -59,7 +59,29 @@ def add_category(request):
 
 
 def category(request, category_name):
-    pass
+    category = get_object_or_404(OutcomeCategory, name=category_name)
+    context = {'category': category}
+    return render(request, 'finances/category.html', context)
+
+
+def add_outcome(request, category_name, category_id):
+    outcome = request.POST['outcome']
+    category = OutcomeCategory.objects.filter(pk=category_id).first()
+    try:
+
+        float(outcome)
+
+    except (ValueError, TypeError):
+
+        message = "Please, enter numeric values for your outcomes"
+        messages.add_message(request, messages.INFO, message)
+
+        return HttpResponseRedirect(reverse('finances:category', args=(category_name,)))
+
+    outcome = Outcome(value=float(outcome), category=category)
+    outcome.save()
+
+    return HttpResponseRedirect(reverse('finances:category', args=(category_name, )))
 
 
 def statistics(request):

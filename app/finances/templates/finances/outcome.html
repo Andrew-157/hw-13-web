@@ -12,7 +12,7 @@
     {% for category in categories %}
     <li>
       <ul>
-        <a href=" url 'finances:category' category.name ">
+        <a href="{% url 'finances:category' category.name %}">
           {{ category.name }}</a
         >
       </ul>

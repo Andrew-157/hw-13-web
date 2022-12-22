@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{category.name}}</title>
+  </head>
+  <body>
+    <form
+      action="{% url 'finances:add_outcome' category.name category.id %}"
+      method="post"
+    >
+      {% csrf_token %} {% if messages %} {% for message in messages %}
+      <div class="{{ message.tags }}">{{ message }}</div>
+      {% endfor %} {% endif %} Money spent on {{category.name}}:<br />
+      <input name="outcome" />
+      <input type="submit" value="Submit" />
+    </form>
+  </body>
+</html>
