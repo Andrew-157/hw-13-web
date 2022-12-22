@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>One day income</title>
+  </head>
+  <body>
+    {% if income %}
+    <p>This day:{{ date_object }} your income was {{ income }}</p>
+    {% else %}
+    <p>You didn't have any income this day: {{ date_object }}</p>
+    {% endif %}
+  </body>
+</html>
