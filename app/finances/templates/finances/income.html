@@ -8,7 +8,9 @@
   </head>
   <body>
     <form action="{% url 'finances:add_income' %}" method="post">
-      {% csrf_token %} Your income:<br />
+      {% csrf_token %} {% if messages %} {% for message in messages %}
+      <div class="{{ message.tags }}">{{ message }}</div>
+      {% endfor %} {% endif %} Your income:<br />
       <input name="income" />
       <input type="submit" value="Submit" />
     </form>

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from .models import Income
+from django.contrib import messages
 
 
 def index(request):
@@ -9,6 +10,7 @@ def index(request):
 
 
 def income(request):
+
     return render(request, 'finances/income.html')
 
 
@@ -21,5 +23,13 @@ def statistics(request):
 
 
 def add_income(request):
-    print(request.POST['income'])
+    income = request.POST['income']
+    print(income)
+    try:
+        float(income)
+    except (ValueError, TypeError):
+        error_message = "Please, enter numeric values for your incomes"
+        messages.add_message(request, messages.INFO, error_message)
+        return HttpResponseRedirect(reverse('finances:income'))
+
     return HttpResponseRedirect(reverse('finances:income'))
