@@ -29,8 +29,15 @@ def add_income(request):
 
         return HttpResponseRedirect(reverse('finances:income'))
 
-    income = Income(value=float(income))
-    income.save()
+    income_in_db = Income.objects.filter(
+        pub_date=timezone.now().date()).first()
+    if income_in_db:
+        income_in_db.value += float(income)
+        income_in_db.save()
+
+    else:
+        new_income = Income(value=float(income))
+        new_income.save()
 
     return HttpResponseRedirect(reverse('finances:income'))
 
@@ -80,8 +87,15 @@ def add_outcome(request, category_name, category_id):
 
         return HttpResponseRedirect(reverse('finances:category', args=(category_name,)))
 
-    outcome = Outcome(value=float(outcome), category=category)
-    outcome.save()
+    outcome_in_db = Outcome.objects.filter(
+        pub_date=timezone.now().date(), category=category).first()
+
+    if outcome_in_db:
+        outcome_in_db.value += float(outcome)
+        outcome_in_db.save()
+    else:
+        new_outcome = Outcome(value=float(outcome), category=category)
+        new_outcome.save()
 
     return HttpResponseRedirect(reverse('finances:category', args=(category_name, )))
 
@@ -92,10 +106,6 @@ def statistics(request):
 
 def statistics_income(request):
     return render(request, 'finances/stat_income.html')
-
-
-def statistics_outcome(request):
-    pass
 
 
 def show_income(request):
@@ -158,5 +168,44 @@ def show_income(request):
         return render(request, 'finances/day_income.html', context)
 
 
+def statistics_outcome(request):
+    return render(request, 'finances/stat_outcome.html')
+
+
 def show_outcome(request):
-    pass
+
+    if 'start_date' in request.POST:
+
+        date_1 = request.POST['start_date']
+        date_object_1 = datetime.strptime(date_1, r'%Y-%m-%d').date()
+        date_2 = request.POST['finish_date']
+        date_object_2 = datetime.strptime(date_2, r'%Y-%m-%d').date()
+
+        if date_object_2 > timezone.now().date() or date_object_1 > timezone.now().date():
+            message = "You cannot use dates in the future"
+            messages.add_message(request, messages.INFO, message)
+            return HttpResponseRedirect(reverse('finances:stat_income'))
+
+        if date_object_2 < date_object_1:
+            message = "Finish date shouldn't be earlier than the start date"
+            messages.add_message(request, messages.INFO, message)
+            return HttpResponseRedirect(reverse('finances:stat_income'))
+
+        if date_object_2 == date_object_1:
+            message = "Don't enter same dates, you can use another form to choose specific day"
+            messages.add_message(request, messages.INFO, message)
+            return HttpResponseRedirect(reverse('finances:stat_outcome'))
+
+        outcomes = Outcome.objects.all()
+        for outcome in outcomes:
+            pass
+
+    if 'specific_date' in request.POST:
+
+        specific_date = request.POST['specific_date']
+        date_object = datetime.strptime(specific_date, r'%Y-%m-%d').date()
+
+        if date_object > timezone.now().date():
+            message = "You cannot use dates in the future"
+            messages.add_message(request, messages.INFO, message)
+            return HttpResponseRedirect(reverse('finances:stat_outcome'))

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Choose date of you incomes</title>
+  </head>
+  <body>
+    <h2>You can choose time period here</h2>
+    <form action="{% url 'finances:show_outcome' %}" method="post">
+      {% csrf_token %} {% if messages %} {% for message in messages %}
+      <div class="{{ message.tags }}">{{ message }}</div>
+      {% endfor %} {% endif %}
+      <p>Start date:</p>
+      <input type="date" name="start_date" />
+      <br />
+      <p>Finish date:</p>
+      <input type="date" name="finish_date" />
+      <input type="submit" value="Submit" />
+    </form>
+    <h2>You can choose specific day here</h2>
+    <form action="{% url 'finances:show_outcome' %}" method="post">
+      {% csrf_token %}
+      <input type="date" name="specific_date" />
+      <br />
+      <input type="submit" value="Submit" />
+    </form>
+  </body>
+</html>
