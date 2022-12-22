@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Categories of outcome</title>
+  </head>
+  <body>
+    {% if categories %}
+    <h2>Choose category</h2>
+    {% for category in categories %}
+    <li>
+      <ul>
+        <a href=" url 'finances:category' category.name ">
+          {{ category.name }}</a
+        >
+      </ul>
+    </li>
+    {% endfor %} {% endif %}
+    <form action="{% url 'finances:add_category' %}" method="post">
+      {% csrf_token %} {% if messages %} {% for message in messages %}
+      <div class="{{ message.tags }}">{{ message }}</div>
+      {% endfor %} {% endif %} Enter new category:<br />
+      <input name="category" />
+      <input type="submit" value="Submit" />
+    </form>
+  </body>
+</html>
