@@ -32,4 +32,6 @@ def add_income(request):
         messages.add_message(request, messages.INFO, error_message)
         return HttpResponseRedirect(reverse('finances:income'))
 
+    income = Income(value=float(income))
+    income.save()
     return HttpResponseRedirect(reverse('finances:income'))
