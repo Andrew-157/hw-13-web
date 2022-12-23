@@ -12,5 +12,6 @@
     {% else %}
     <p>You didn't have any income this day: {{ date_object }}</p>
     {% endif %}
+    <a href="{% url 'finances:index' %}">Back to the homepage?</a>
   </body>
 </html>

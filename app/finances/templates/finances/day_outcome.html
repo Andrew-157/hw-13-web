@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Outcome in a specific day</title>
-</head>
-<body>
+  </head>
+  <body>
     {% if data_dict %}
     <h2>This day you {{ date_object }} your outcome was:</h2>
     <table>
@@ -25,5 +25,6 @@
     {% else %}
     <p>You didn't have any outcome this day {{ date_object }}</p>
     {% endif %}
-</body>
+    <a href="{% url 'finances:index' %}">Back to the homepage?</a>
+  </body>
 </html>
