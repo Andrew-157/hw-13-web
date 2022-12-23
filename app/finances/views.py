@@ -174,6 +174,10 @@ def statistics_outcome(request):
 
 def show_outcome(request):
 
+    outcome_list = []
+    categories_list = []
+    data_dict = {}
+
     if 'start_date' in request.POST:
 
         date_1 = request.POST['start_date']
@@ -198,7 +202,27 @@ def show_outcome(request):
 
         outcomes = Outcome.objects.all()
         for outcome in outcomes:
-            pass
+            if outcome.pub_date >= date_object_1 and outcome.pub_date <= date_object_2:
+                outcome_list.append(outcome)
+
+        for outcome in outcome_list:
+            categories_list.append(
+                OutcomeCategory.objects.filter(name=outcome.category.name).first())
+
+        for category in categories_list:
+            sum_for_category = 0
+            for outcome in outcomes:
+                if outcome.category == category:
+                    sum_for_category += outcome.value
+                    data_dict[category.name] = sum_for_category
+
+        total_outcome = 0
+        for val in data_dict.values():
+            total_outcome += val
+        context = {'data_dict': data_dict,
+                   'date_object_1': date_object_1, 'date_object_2': date_object_2, 'total_outcome': total_outcome}
+
+        return render(request, 'finances/period_outcome.html', context)
 
     if 'specific_date' in request.POST:
 
@@ -209,3 +233,24 @@ def show_outcome(request):
             message = "You cannot use dates in the future"
             messages.add_message(request, messages.INFO, message)
             return HttpResponseRedirect(reverse('finances:stat_outcome'))
+
+        objects = Outcome.objects.filter(pub_date=date_object).all()
+
+        for obj in objects:
+            categories_list.append(OutcomeCategory.objects.filter(
+                name=obj.category.name).first())
+
+        for category in categories_list:
+            sum_for_category = 0
+            for obj in objects:
+                if obj.category == category:
+                    sum_for_category += obj.value
+                    data_dict[category.name] = sum_for_category
+
+        total_outcome = 0
+        for val in data_dict.values():
+            total_outcome += val
+        context = {'data_dict': data_dict,
+                   'date_object': date_object, 'total_outcome': total_outcome}
+
+        return render(request, 'finances/day_outcome.html', context)
