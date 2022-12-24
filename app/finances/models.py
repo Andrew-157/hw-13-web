@@ -5,7 +5,7 @@ from django.utils import timezone
 class Income(models.Model):
     value = models.FloatField()
     pub_date = models.DateField(
-        'date published', default=timezone.now().date())
+        'date published', default=timezone.now)
 
 
 class OutcomeCategory(models.Model):
@@ -16,4 +16,4 @@ class Outcome(models.Model):
     category = models.ForeignKey(OutcomeCategory, on_delete=models.CASCADE)
     value = models.FloatField()
     pub_date = models.DateField(
-        'date published', default=timezone.now().date())
+        'date published', default=timezone.now)
